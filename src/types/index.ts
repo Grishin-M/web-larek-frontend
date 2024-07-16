@@ -7,21 +7,14 @@ export interface IWebLarekAPI {
 export interface IComponent<NodeType extends HTMLElement, DataType extends object> {
   render(data: DataType): NodeType;
   remove(): this;
-  show(): this;
-  hide(): this;
   setText(value: string): this;
-  setLink(value: string): this;
   setImage(src: string, alt: string): this;
   setValue(value: string): this;
   getValue(): string;
-  isValid(): boolean;
   addClass(className: string): this;
   removeClass(className: string): this;
   hasClass(className: string): boolean;
   append(element: HTMLElement): this;
-  prepend(element: HTMLElement): this;
-  bem(element?: string, modifier?: string): string;
-  clone(template: string, data?: DataType, name?: string): any;
   mount(selectorElement: HTMLElement | string, data?: any, name?: string): any;
 }
 
