@@ -1,16 +1,11 @@
-export type ApiListResponse<Type> = {
-    total: number,
-    items: Type[]
-};
-
-export type ApiPostMethods = 'POST' | 'PUT' | 'DELETE';
+import { ApiMethods } from '../../types';
 
 export class Api {
-    readonly baseUrl: string;
+    readonly url: string;
     protected options: RequestInit;
 
-    constructor(baseUrl: string, options: RequestInit = {}) {
-        this.baseUrl = baseUrl;
+    constructor(url: string, options: RequestInit = {}) {
+        this.url = url;
         this.options = {
             headers: {
                 'Content-Type': 'application/json',
@@ -26,14 +21,14 @@ export class Api {
     }
 
     get(uri: string) {
-        return fetch(this.baseUrl + uri, {
+        return fetch(this.url + uri, {
             ...this.options,
             method: 'GET'
         }).then(this.handleResponse);
     }
 
-    post(uri: string, data: object, method: ApiPostMethods = 'POST') {
-        return fetch(this.baseUrl + uri, {
+    post(uri: string, data: object, method: ApiMethods = 'POST') {
+        return fetch(this.url + uri, {
             ...this.options,
             method,
             body: JSON.stringify(data)

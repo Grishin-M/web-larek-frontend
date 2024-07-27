@@ -1,83 +1,103 @@
-export interface IWebLarekAPI {
-  getProductList(): Promise<IProduct[]>;
-  getProductItem(id: string): Promise<IProduct>;
+export interface IAppApi {
+  products(): Promise<IItem[]>;
+  productItem(id: string): Promise<IItem>;
   sendOrder(order: IOrder): Promise<IOrderResult>;
 }
 
-export interface IComponent<NodeType extends HTMLElement, DataType extends object> {
-  render(data: DataType): NodeType;
-  remove(): this;
-  setText(value: string): this;
-  setImage(src: string, alt: string): this;
-  setValue(value: string): this;
-  getValue(): string;
-  addClass(className: string): this;
-  removeClass(className: string): this;
-  hasClass(className: string): boolean;
-  append(element: HTMLElement): this;
-  mount(selectorElement: HTMLElement | string, data?: any, name?: string): any;
-}
-
-export interface IProduct {
+export interface IItem {
   id: string;
-  description: string;
   image: string;
-  title: string;
   category: string;
-  price: number | null;
-}
-
-export interface IModal {
-  container: HTMLElement;
-  content: HTMLElement;
-  closeButton: HTMLButtonElement;
-  setContent(): void;
-  open(): void;
-  close(): void;
-}
-
-export interface IForm {
-  container: HTMLElement;
-  submit: HTMLButtonElement;
-  errors: HTMLElement;
-  isValid(): boolean;
-  setErrors(error: string): void;
-  clear(): void;
-}
-
-export interface IBasket {
   title: string;
-  orderList: HTMLElement[];
-  total: string;
-
-  setTitle(title: string): void;
-  setOrders(orders: HTMLElement[]): void;
-  remove(order: HTMLElement): void;
-  getTotal(): string;
-  accept(): void;
-}
-
-export interface ICardData {
-  cardArray: IProduct[]
-  getCardInformation(id: string): IProduct;
-}
-
-export interface IBasketData {
-  total: number;
-  setBasketItems(basketItems: IProduct[]): void;
-  clear(): void;
-}
-
-export interface IOrder {
-  items: IProduct[];
-  total: number;
-  payment: string;
-  email: string;
-  phone: string;
-  address: string;
+  description: string;
+  price: number | null;
 }
 
 export interface IOrderResult {
   id: string;
   total: number | null;
+}
+
+export type ApiMethods = 'POST' | 'PUT' | 'DELETE';
+
+export type ProductsApiResponse<Type> = {
+  total: number,
+  items: Type[]
+};
+
+export type EventName = string | RegExp;
+export type Subscriber = Function;
+export type EmitterEvent = {
+  eventName: string,
+  data: unknown
+};
+
+export interface IEvents {
+  on<T extends object>(event: EventName, callback: (data: T) => void): void;
+  emit<T extends object>(event: string, data?: T): void;
+  trigger<T extends object>(event: string, context?: Partial<T>): (data: T) => void;
+}
+
+export interface IFormState {
+  isValid: boolean;
+  errors: string[];
+}
+
+export interface IModalData {
+  content: HTMLElement;
+}
+
+export interface IShoppingCart {
+  items: HTMLElement[];
+  total: number;
+}
+
+export interface ISuccess {
+  total: number;
+}
+
+export interface ISuccessActions {
+  onClick: () => void;
+}
+
+export interface IState {
+  catalog: IItem[];
+  preview: string | null;
+  shoppingCart: IItem[];
+  formErrors: FormErrors;
+  contact: IUser | null;
+  order: IOrder | null;
+  payment: IPaymentForm | null;
+}
+
+export interface IOrder extends IPaymentForm, IUser {
+  total: number | null;
+  items: string[];
+}
+
+export interface IPaymentForm {
+  payment: string;
+  address: string;
+}
+
+export interface IUser {
+  email: string;
+  phone: string;
+}
+
+export type FormErrors = Partial<Record<keyof IOrder, string>>;
+
+export interface ICard extends IItem {
+  index?: string;
+  btnText?: string;
+}
+
+export interface IActions {
+  onClick: (event: MouseEvent) => void;
+}
+
+export interface IPage {
+  counter: number | null;
+  catalog: HTMLElement[];
+  locked: boolean;
 }
