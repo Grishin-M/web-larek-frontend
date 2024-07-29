@@ -23,14 +23,14 @@ export class Card extends Component<ICard> {
     this._index = container.querySelector('.basket__item-index');
     this._category = container.querySelector('.card__category');
 
-    if (actions?.onClick) {
-      if (this._button) {
+  if (actions?.onClick) {
+    if (this._button) {
         this._button.addEventListener('click', actions.onClick);
       } else {
         container.addEventListener('click', actions.onClick);
       }
     }
-  }
+  }   
 
   buttonDisabled(value: number | null) {
     if (!value) {
@@ -71,9 +71,11 @@ export class Card extends Component<ICard> {
 
   set category(value: string) {
     this.setText(this._category, value);
+    this._category.classList.remove('card__category_soft')
+    this._category.classList.remove('card__category_other')
     this._category.classList.add(Сategory[value]);
   }
-
+  
   get category(): string {
     return this._category.textContent || '';
   }

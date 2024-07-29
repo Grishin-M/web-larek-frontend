@@ -83,12 +83,13 @@ events.on('preview:change', (item: Product) => {
 })
 
 events.on('order:open', () => {
+  const { payment, address } = appData.order
   modal.render({
     content: delivery.render({
-      payment: '',
-      address: '',
-      isValid: false,
-      errors: []
+      payment: payment,
+      address: address,
+      isValid: address.length && true,
+      errors: [appData.formErrors.address],
     })
   })
   appData.order.items = appData.shoppingCart.map((item) => item.id);
@@ -195,12 +196,14 @@ events.on('card:add', (item: Product) => appData.addItemToShoppingCart(item));
 events.on('preview:select', (item: Product) => appData.setPreview(item));
 
 events.on('order:submit', () => {
+  const { phone, email } = appData.order
+  const { email: isErrorEmail, phone: isErrorPhone } = appData.formErrors
   modal.render({
     content: contact.render({
-      email: '',
-      phone: '',
-      isValid: false,
-      errors: [],
+      email: email,
+      phone: phone,
+      isValid: appData.order.email.length && appData.order.phone && true,
+      errors: isErrorEmail ? [isErrorEmail] : isErrorPhone ? [isErrorPhone] : [],
     }),
   });
 });
